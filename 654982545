@@ -1,0 +1,105 @@
+repeat task.wait() until not game.Players.LocalPlayer.PlayerGui.LoadingScreen
+
+
+
+
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local RS = game:GetService("ReplicatedStorage")
+local RM_Sync = RS:WaitForChild("Remotes"):WaitForChild("Sync")
+
+
+
+local RerollArgs = {
+	"Character",
+	"Customization",
+	"LastName"
+}
+
+local RollbackArgs = {
+	"Character",
+	"Customization",
+	"Eyes",
+	workspace
+}
+
+
+Rejoid = function()
+    local queue_on_teleport = (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport) or queue_on_teleport
+
+local script_to_run = [[
+    print("Rejoin")
+]]
+
+if queue_on_teleport then
+    queue_on_teleport(script_to_run)
+end
+
+-- หลังจากสั่ง queue เสร็จค่อยสั่ง Rejoin หรือย้ายแมพ
+game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+
+end
+
+
+
+
+
+
+
+GetLastName = function()
+	for i,v in next, getgc(true) do
+		if typeof(v) == "table" and rawget(v, "PlayerData") then
+			for _,v in pairs(v.PlayerData) do
+				if _ == "LastName" then
+					return v
+				end
+			end
+		end
+	end
+end
+
+GetChance = function()
+	for i,v in next, getgc(true) do
+		if typeof(v) == "table" and rawget(v, "PlayerData") then
+			for _,v in pairs(v.PlayerData) do
+				if _ == "FamilyRolls" then
+					return v
+				end
+			end
+		end
+	end
+end
+
+getgenv().AutoReroll = {
+    ["Enable"] = true,
+    ["TargetRoll"] = "Kamado"
+}
+
+
+
+ task.spawn(function()
+        while task.wait(0.01) do
+            local Lastname = GetLastName()
+            local Chance = GetChance()
+            local targetRoll = getgenv().AutoReroll["TargetRoll"]
+            if getgenv().AutoReroll["Enable"] then
+                if Lastname == targetRoll then
+                    RM_Sync:InvokeServer("Character","Customization","Eyes",1)
+                elseif Chance > 0 then
+                    RM_Sync:InvokeServer(unpack(RollbackArgs))
+                    task.wait(0.1)
+                    RM_Sync:InvokeServer(unpack(RerollArgs))
+                    task.wait(0.1)
+                else 
+                    Rejoid()
+                    break
+                end
+            end
+        end
+    end)
+
+
+
+
+
