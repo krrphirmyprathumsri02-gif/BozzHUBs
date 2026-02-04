@@ -1,4 +1,9 @@
-repeat task.wait() until not game.Players.LocalPlayer.PlayerGui:FindFirstChild("LoadingScreen")
+local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+repeat task.wait() 
+until not playerGui:FindFirstChild("LoadingScreen")
+
+
 
 
 
