@@ -96,7 +96,7 @@ getgenv().AutoReroll = {
                     RM_Sync:InvokeServer(unpack(RollbackArgs))
                     task.wait(0.1)
                     RM_Sync:InvokeServer(unpack(RerollArgs))
-                    task.wait(1)
+                    task.wait(0.1)
                 else 
                     Rejoid()
                     break
